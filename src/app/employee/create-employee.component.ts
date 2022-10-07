@@ -35,5 +35,20 @@ export class CreateEmployeeComponent implements OnInit {
 
 
   }
+  onLoadDataClick(): void{
+    this.employeeForm.setValue({
+      fullName:'sanju',
+      email:"sanju2000@gmail.com",
+      skills:{
+        skillName:'angular',
+        experienceInYears:5,
+        proficiency:'beginner'
+
+      }
+
+
+
+    })
+  }
 
 }
