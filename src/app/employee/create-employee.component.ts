@@ -21,14 +21,7 @@ export class CreateEmployeeComponent implements OnInit {
           proficiency:['beginner']
         })
      });
-     this.employeeForm.get('skills').valueChanges.subscribe( (value:any)=> {
-     console.log(JSON.stringify(value));
-
-    });
-
-
-
-  }
+    }
   onSubmit(): void{
     console.log(this.employeeForm.touched);
     console.log(this.employeeForm.value);
@@ -38,20 +31,20 @@ export class CreateEmployeeComponent implements OnInit {
 
 
   }
-  onLoadDataClick(): void{
-    this.employeeForm.setValue({
-      fullName:'sanju',
-      email:"sanju2000@gmail.com",
-      skills:{
-        skillName:'angular',
-        experienceInYears:5,
-        proficiency:'beginner'
-
+  logKeyValuePairs(group:FormGroup): void{
+    Object.keys(group.controls).forEach((Key: string)=>{
+      const abstractControl=group.get(Key);
+      if(abstractControl instanceof FormGroup){
+        this.logKeyValuePairs(abstractControl);
+      }else{
+        abstractControl?.markAsDirty();
       }
-
-
 
     })
   }
+
+  onLoadDataClick(): void{
+     this.logKeyValuePairs(this.employeeForm)
+    }
 
 }
