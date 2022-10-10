@@ -25,7 +25,7 @@ export class CreateEmployeeComponent implements OnInit {
     },
     'email': {
       'required': 'Email is required.',
-      'emailDomain':'email domain is pragimtech.com '
+      'emailDomain':'email domain is dell.com '
     },
     'phone': {
       'required': 'phone is required.'
@@ -46,7 +46,7 @@ export class CreateEmployeeComponent implements OnInit {
     this.employeeForm=this.fb.group({
       fullName:['',[Validators.required,Validators.minLength(2),Validators.maxLength(10)]],
       contactPreference:['email'],
-      email:['',[Validators.required,emailDomain]],
+      email:['',[Validators.required,emailDomain('dell.com')]],
       phone:['',],
         skills: this.fb.group({
           skillName:['',Validators.required],
@@ -109,17 +109,19 @@ export class CreateEmployeeComponent implements OnInit {
 
     }
   }
-     function emailDomain(control: AbstractControl): {[key:string]:any}|null{
+     function emailDomain(domainName: string){
+      return (control: AbstractControl): {[key:string]:any}|null=>{
       const email: string=control.value
       const domain=email.substring(email.lastIndexOf('@')+1);
-      if( email==="" ||domain.toLowerCase()==='pragimtech.com'){
+      if( email==="" ||domain.toLowerCase()==='dell.com'){
         return null;
       }
         else{
           return{'emailDomain':true};
         }
 
-      }
+      };
+    }
 
 
 
