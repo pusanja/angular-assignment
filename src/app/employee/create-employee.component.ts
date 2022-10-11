@@ -62,11 +62,11 @@ export class CreateEmployeeComponent implements OnInit {
       },{validator:matchEmail}),
 
       phone:[''],
-        skills: this.fb.group({
-          skillName:['',Validators.required],
-          experienceInYears:['',Validators.required],
-          proficiency:['',Validators.required]
-        })
+        skills: this.fb.array([
+          this.addSkillFormGroup()
+
+        ])
+
      });
      this.employeeForm.get('contactPreference')?.valueChanges.subscribe((data:string)=>{
      this.onContactPreferenceChange(data);
@@ -83,6 +83,14 @@ export class CreateEmployeeComponent implements OnInit {
     console.log(this.employeeForm.controls['fullName'].touched);
     console.log(this.employeeForm.get('email')?.value);
 
+
+  }
+  addSkillFormGroup(): FormGroup{
+     return this.fb.group({
+      skillName:['',Validators.required],
+      experienceInYears:['',Validators.required],
+      proficiency:['',Validators.required]
+    })
 
   }
   onContactPreferenceChange(selectedValue:string){
@@ -112,6 +120,13 @@ export class CreateEmployeeComponent implements OnInit {
       if(abstractControl instanceof FormGroup){
         this.logValidationErrors(abstractControl);
       }
+      if(abstractControl instanceof FormArray){
+        for (const control of abstractControl.controls ){
+          if (control instanceof FormGroup)
+
+        this.logValidationErrors(control);
+      }
+    }
 
 
     })
