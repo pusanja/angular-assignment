@@ -11,6 +11,8 @@ export class CreateEmployeeComponent implements OnInit {
   formErrors = {
     'fullName': '',
     'email': '',
+    'confirmEmail' :'',
+    'emailGroup':'',
     'phone':'',
     'skillName': '',
     'experienceInYears': '',
@@ -26,6 +28,13 @@ export class CreateEmployeeComponent implements OnInit {
     'email': {
       'required': 'Email is required.',
       'emailDomain':'email domain is dell.com '
+    },
+    'confirmEmail': {
+      'required': 'confirmEmail is required.',
+      'emailDomain':'email domain is dell.com '
+    },
+    'emailGroup':{
+      'emailMismatch':'email and confirm email do not match'
     },
     'phone': {
       'required': 'phone is required.'
@@ -46,8 +55,13 @@ export class CreateEmployeeComponent implements OnInit {
     this.employeeForm=this.fb.group({
       fullName:['',[Validators.required,Validators.minLength(2),Validators.maxLength(10)]],
       contactPreference:['email'],
-      email:['',[Validators.required, CustomValidators.emailDomain('dell.com')]],
-      phone:['',],
+      emailGroup: this.fb.group({
+        email:['',[Validators.required, CustomValidators.emailDomain('dell.com')]],
+      confirmEmail:['',Validators.required]
+
+      },{validator:matchEmail}),
+
+      phone:[''],
         skills: this.fb.group({
           skillName:['',Validators.required],
           experienceInYears:['',Validators.required],
@@ -83,10 +97,8 @@ export class CreateEmployeeComponent implements OnInit {
   logValidationErrors(group:FormGroup=this.employeeForm): void{
     Object.keys(group.controls).forEach((Key: string)=>{
       const abstractControl=group.get(Key);
-      if(abstractControl instanceof FormGroup){
-        this.logValidationErrors(abstractControl);
-      }else{
-        (this.formErrors as any)[Key]='';
+
+      (this.formErrors as any)[Key]='';
         if(abstractControl && ! abstractControl.valid&&(abstractControl.touched||abstractControl.dirty)){
         const messages=(this.validationMessages as any)[Key];
 
@@ -97,6 +109,8 @@ export class CreateEmployeeComponent implements OnInit {
         }
         }
 
+      if(abstractControl instanceof FormGroup){
+        this.logValidationErrors(abstractControl);
       }
 
 
@@ -108,6 +122,17 @@ export class CreateEmployeeComponent implements OnInit {
     //  console.log(this.formErrors);
 
     }
+  }
+  function matchEmail(group:AbstractControl): {[key:string]:any}|null{
+    const emailControl=group.get('email');
+    const confirmEmailControl=group.get('confirmEmail');
+
+    if( emailControl ?.value===confirmEmailControl ?.value||confirmEmailControl?.pristine){
+           return null;
+    } else{
+      return{emailMismatch:true};
+    }
+
   }
 
 
