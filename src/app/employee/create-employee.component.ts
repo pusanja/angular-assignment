@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup,FormBuilder,Validators, AbstractControl } from '@angular/forms';
+import { FormGroup,FormBuilder,Validators, AbstractControl, FormArray, FormControl } from '@angular/forms';
 import { CustomValidators } from '../shared/custom.validators';
 @Component({
   selector: 'app-create-employee',
@@ -118,12 +118,25 @@ export class CreateEmployeeComponent implements OnInit {
   }
 
   onLoadDataClick(): void{
-    //  this.logValidationErrors(this.employeeForm)
-    //  console.log(this.formErrors);
+
+         const formArray1=this.fb.array([
+          new FormControl('john',Validators.required),
+          new FormControl('It',Validators.required),
+          new FormControl('male',Validators.required)
+          ]);
+          const FormGroup=this.fb.group([
+            new FormControl('john',Validators.required),
+            new FormControl('It',Validators.required),
+            new FormControl('male',Validators.required)
+            ]);
+
+          console.log(formArray1);
+          console.log(FormGroup);
+
 
     }
   }
-  function matchEmail(group:AbstractControl): {[key:string]:any}|null{
+   function matchEmail(group:AbstractControl): {[key:string]:any}|null{
     const emailControl=group.get('email');
     const confirmEmailControl=group.get('confirmEmail');
 
