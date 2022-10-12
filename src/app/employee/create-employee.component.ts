@@ -75,6 +75,9 @@ export class CreateEmployeeComponent implements OnInit {
       this.logValidationErrors(this.employeeForm);
      });
     }
+    addSkillButtonClick():void{
+      (<FormArray>this.employeeForm.get('skills')).push(this.addSkillFormGroup());
+    }
 
   onSubmit(): void{
     console.log(this.employeeForm.touched);
@@ -85,13 +88,16 @@ export class CreateEmployeeComponent implements OnInit {
 
 
   }
-  addSkillFormGroup(): FormGroup{
+   addSkillFormGroup(): FormGroup{
      return this.fb.group({
       skillName:['',Validators.required],
       experienceInYears:['',Validators.required],
       proficiency:['',Validators.required]
     })
 
+  }
+  get skills(): FormArray{
+    return this.employeeForm.get('skills')as FormArray;
   }
   onContactPreferenceChange(selectedValue:string){
     const phoneControl=this.employeeForm.get('phone');
